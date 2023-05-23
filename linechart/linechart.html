@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Line Chart</title>
+  <link rel="stylesheet" href="linechart.css">
+</head>
+<body>
+  <div class="header">
+    <h2 id="chart-title">HDI line chart by country - year <span id="selected-year"></span></h2>
+    <div class="dropdown">
+      <label for="year-select">Odaberi godinu:</label>
+      <select id="year-select"></select>
+    </div>
+    <a href="../barchart/barchart.html" class="button">Bar Chart</a>
+    <a href="../worldmap/worldmap.html" class="button">World Map</a>
+  </div>
+  
+  <div id="chart-container">
+    <div id="tooltip" class="tooltip"></div>
+    <svg id="chart"></svg>
+  </div>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="linechart.js"></script>
+</body>
+</html>

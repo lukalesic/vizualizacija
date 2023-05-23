@@ -1,0 +1,55 @@
+#chart-container {
+    width: 100%;
+    overflow-x: scroll;
+  }
+  
+  #header {
+    background-color: lightgreen;
+    padding: 20px;
+  }
+  
+  #header h1 {
+    color: white;
+  }
+  
+  #header .button {
+    color: white;
+  }
+  
+  #chart-title{
+    color: white;
+  }
+  
+  .tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 6px;
+    font-size: 12px;
+    background: #f7f7f7;
+    border: 1px solid #ccc;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  
+  .button {
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    padding-top: 10px;
+  }
+  
+  #year-select, #sort-order {
+    background-color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+  }
+  

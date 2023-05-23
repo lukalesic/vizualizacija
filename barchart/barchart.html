@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bar Chart</title>
+  <link rel="stylesheet" href="barchart.css">
+</head>
+<body>
+  <div id="header">
+    <h1>Bar Chart</h1>
+    <div>
+      <a href="../worldmap/worldmap.html" class="button">World Map</a>
+      <a href="../linechart/linechart.html" class="button">Line Chart</a>
+    </div>
+    <h2 id="chart-title">HDI index by country - year <span id="selected-year"></span></h2>
+
+    <div>
+      <label for="year-select">Select Year:</label>
+      <select id="year-select"></select>
+    </div>
+    <div>
+      <label for="sort-order">Sort Order:</label>
+      <select id="sort-order">
+        <option value="descending">Descending</option>
+        <option value="ascending">Ascending</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="chart-container">
+    <svg id="chart"></svg>
+  </div>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="barchart.js"></script>
+</body>
+</html>

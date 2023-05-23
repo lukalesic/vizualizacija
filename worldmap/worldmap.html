@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>World map</title>
+    <link rel="stylesheet" href="worldmap.css">
+    <script src="https://unpkg.com/d3@5.6.0/dist/d3.min.js"></script>
+    <script src="https://unpkg.com/topojson@3.0.2/dist/topojson.min.js"></script>
+  </head>
+  <body>
+    <div class="header">
+      <h1 id="title">HDI values for year 1990</h1>
+      <div class="dropdown">
+        <label for="year-picker">Select Year:</label>
+        <select id="year-picker"></select>
+      </div>
+      <a href="../barchart/barchart.html" class="button">Bar Chart</a>
+      <a href="../linechart/linechart.html" class="button">Line chart</a>
+    </div>
+    <svg width="960" height="500"></svg>
+    <script src="worldmap.js"></script>
+    <script>
+      const yearPicker = document.getElementById('year-picker');
+      const title = document.getElementById('title');
+
+      yearPicker.addEventListener('change', () => {
+        const selectedYear = yearPicker.value;
+        title.textContent = `HDI values for year ${selectedYear}`;
+      });
+    </script>
+  </body>
+</html>

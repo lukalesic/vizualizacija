@@ -2,11 +2,10 @@
   'use strict';
 
   const svg = d3.select('svg');
-
   const projection = d3.geoNaturalEarth1();
   const pathGenerator = d3.geoPath().projection(projection);
-
   const g = svg.append('g');
+  const yearPicker = d3.select('#year-picker');
 
   g.append('path')
     .attr('class', 'sphere')
@@ -27,6 +26,13 @@
       countryName[d.iso_n3] = d.name;
     });
 
+    const years = Object.keys(jsonData[0]).filter(key => !isNaN(parseInt(key)));
+
+    yearPicker.selectAll('option')
+      .data(years)
+      .enter()
+      .append('option')
+      .text(d => d);
 
     const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries);
     const countryPaths = g.selectAll('path').data(countries.features)
@@ -39,7 +45,8 @@
         const countryId = d.id;
         const country = jsonData.find(c => c.Country === countryName[countryId]);
         if (country) {
-          const hdiRank = country['2018']; // Assuming '2018' is the HDI rank property for that year
+          const selectedYear = yearPicker.property('value');
+          const hdiRank = country[selectedYear] || '???';
           return `${country.Country} (HDI Rank: ${hdiRank})`;
         } else {
           return 'unknown'; // Return only the country name if no matching country object is found
@@ -52,16 +59,32 @@
       if (hdiLabel) {
         hdiLabel.remove();
       }
-      
+
+      const selectedYear = yearPicker.property('value');
       const countryId = d.id;
       const country = jsonData.find(c => c.Country === countryName[countryId]);
-      const hdiRank2018 = country ? country['2018'] : '???';
-      
+      const hdiRank = country ? country[selectedYear] || '???' : '???';
+
       hdiLabel = svg.append('text')
         .attr('class', 'hdi-label')
         .attr('x', 10)
         .attr('y', 20)
-        .text(`HDI in 2018 for ${countryName[countryId]}: ${hdiRank2018}`);
+        .text(`HDI in ${selectedYear} for ${countryName[countryId]}: ${hdiRank}`);
+    });
+
+    yearPicker.on('change', () => {
+      countryPaths.select('title')
+        .text(d => {
+          const countryId = d.id;
+          const country = jsonData.find(c => c.Country === countryName[countryId]);
+          if (country) {
+            const selectedYear = yearPicker.property('value');
+            const hdiRank = country[selectedYear] || '???';
+            return `${country.Country} (HDI Rank: ${hdiRank})`;
+          } else {
+            return 'unknown';
+          }
+        });
     });
   });
 

@@ -37,11 +37,10 @@ body {
 }
 
 .sphere {
-  fill: whitesmoke;
+  fill: #D1E5F4;
 }
 
 .country {
-  fill: lightgreen;
   stroke: black;
   stroke-width: 0.05px;
 }

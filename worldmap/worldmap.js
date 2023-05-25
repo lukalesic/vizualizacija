@@ -35,10 +35,31 @@
       .text(d => d);
 
     const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries);
-    const countryPaths = g.selectAll('path').data(countries.features)
-      .enter().append('path')
-      .attr('class', 'country')
-      .attr('d', pathGenerator);
+    const countryPaths = g
+    .selectAll('path')
+    .data(countries.features)
+    .enter()
+    .append('path')
+    .attr('class', 'country')
+    .attr('d', pathGenerator)
+    .attr('fill', d => {
+      const countryId = d.id;
+      const country = jsonData.find(c => c.Country === countryName[countryId]);
+      if (country) {
+        const selectedYear = yearPicker.property('value');
+        const hdiRank = country[selectedYear] || '???';
+  
+        // Calculate the color based on HDI value
+        const colorScale = d3.scaleLinear()
+          .domain([0, 1])
+          .range(['red', 'green']);
+  
+        return colorScale(hdiRank);
+      } else {
+        return 'white'; 
+      }
+    });
+  
 
     countryPaths.append('title')
       .text(d => {
@@ -49,7 +70,7 @@
           const hdiRank = country[selectedYear] || '???';
           return `${country.Country} (HDI Rank: ${hdiRank})`;
         } else {
-          return 'unknown'; // Return only the country name if no matching country object is found
+          return 'unknown';
         }
       });
 
@@ -73,6 +94,23 @@
     });
 
     yearPicker.on('change', () => {
+      countryPaths.attr('fill', d => {
+        const countryId = d.id;
+        const country = jsonData.find(c => c.Country === countryName[countryId]);
+        if (country) {
+          const selectedYear = yearPicker.property('value');
+          const hdiRank = country[selectedYear] || '???';
+
+          const colorScale = d3.scaleLinear()
+            .domain([0, 1])
+            .range(['red', 'green']);
+
+          return colorScale(hdiRank);
+        } else {
+          return 'white';
+        }
+      });
+
       countryPaths.select('title')
         .text(d => {
           const countryId = d.id;

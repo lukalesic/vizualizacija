@@ -3,13 +3,13 @@
 
   const svg = d3.select('svg');
   const projection = d3.geoNaturalEarth1();
-  const pathGenerator = d3.geoPath().projection(projection);
+  const pathGen = d3.geoPath().projection(projection);
   const g = svg.append('g');
   const activeYearPicker = d3.select('#year-picker');
 
   g.append('path')
     .attr('class', 'sphere')
-    .attr('d', pathGenerator({ type: 'Sphere' }));
+    .attr('d', pathGen({ type: 'Sphere' }));
 
   svg.call(d3.zoom().on('zoom', () => {
     g.attr('transform', d3.event.transform);
@@ -36,13 +36,13 @@
 
     const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries);
 
-    const countryPaths = g
+    const allcountries = g
     .selectAll('path')
     .data(countries.features)
     .enter()
     .append('path')
     .attr('class', 'country')
-    .attr('d', pathGenerator)
+    .attr('d', pathGen)
     .attr('fill', d => {
       const Id = d.id;
       const country = jsonData.find(c => c.Country === countryName[Id]);
@@ -59,27 +59,8 @@
       }
     });
 
-    let hdiDisplayText = null;
-
-    countryPaths.on('click', d => {
-      if (hdiDisplayText) {
-        hdiDisplayText.remove();
-      }
-
-      const activeYear = activeYearPicker.property('value');
-      const Id = d.id;
-      const country = jsonData.find(file => file.Country === countryName[Id]);
-      const hdiRank = country ? country[activeYear] || 'unknown' : 'not registered';
-
-      hdiDisplayText = svg.append('text')
-        .attr('class', 'hdi-label')
-        .attr('x', 300)
-        .attr('y', 550)
-        .text(`HDI in ${activeYear} for ${countryName[Id]}: ${hdiRank}`);
-    });
-
     activeYearPicker.on('change', () => {
-      countryPaths.attr('fill', d => {
+      allcountries.attr('fill', d => {
         const Id = d.id;
         const country = jsonData.find(data => data.Country === countryName[Id]);
         if (country) {
@@ -96,6 +77,26 @@
         }
       });
     });
+
+    let hdiDisplayText = null;
+
+    allcountries.on('click', clicked => {
+      if (hdiDisplayText) {
+        hdiDisplayText.remove();
+      }
+
+      const activeYear = activeYearPicker.property('value');
+      const Id = clicked.id;
+      const country = jsonData.find(file => file.Country === countryName[Id]);
+      const hdiRank = country ? country[activeYear] || 'unknown' : 'not registered';
+
+      hdiDisplayText = svg.append('text')
+        .attr('class', 'hdi-label')
+        .attr('x', 300)
+        .attr('y', 550)
+        .text(`HDI in ${activeYear} for ${countryName[Id]}: ${hdiRank}`);
+    });
+
   });
 
 }(d3, topojson));

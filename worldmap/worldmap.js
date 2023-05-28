@@ -5,7 +5,7 @@
   const projection = d3.geoNaturalEarth1();
   const pathGenerator = d3.geoPath().projection(projection);
   const g = svg.append('g');
-  const yearPicker = d3.select('#year-picker');
+  const activeYearPicker = d3.select('#year-picker');
 
   g.append('path')
     .attr('class', 'sphere')
@@ -28,13 +28,14 @@
 
     const years = Object.keys(jsonData[0]).filter(key => !isNaN(parseInt(key)));
 
-    yearPicker.selectAll('option')
+    activeYearPicker.selectAll('option')
       .data(years)
       .enter()
       .append('option')
-      .text(d => d);
+      .text(year => year);
 
     const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries);
+
     const countryPaths = g
     .selectAll('path')
     .data(countries.features)
@@ -43,86 +44,57 @@
     .attr('class', 'country')
     .attr('d', pathGenerator)
     .attr('fill', d => {
-      const countryId = d.id;
-      const country = jsonData.find(c => c.Country === countryName[countryId]);
+      const Id = d.id;
+      const country = jsonData.find(c => c.Country === countryName[Id]);
       if (country) {
-        const selectedYear = yearPicker.property('value');
-        const hdiRank = country[selectedYear] || '???';
+        const activeYear = activeYearPicker.property('value');
+        const hdiRank = country[activeYear] || 'unknown';
   
-        // Calculate the color based on HDI value
-        const colorScale = d3.scaleLinear()
+        const colorRange = d3.scaleLinear()
           .domain([0, 1])
           .range(['red', 'green']);
-  
-        return colorScale(hdiRank);
+        return colorRange(hdiRank);
       } else {
         return 'white'; 
       }
     });
-  
 
-    countryPaths.append('title')
-      .text(d => {
-        const countryId = d.id;
-        const country = jsonData.find(c => c.Country === countryName[countryId]);
-        if (country) {
-          const selectedYear = yearPicker.property('value');
-          const hdiRank = country[selectedYear] || '???';
-          return `${country.Country} (HDI Rank: ${hdiRank})`;
-        } else {
-          return 'unknown';
-        }
-      });
-
-    let hdiLabel = null;
+    let hdiDisplayText = null;
 
     countryPaths.on('click', d => {
-      if (hdiLabel) {
-        hdiLabel.remove();
+      if (hdiDisplayText) {
+        hdiDisplayText.remove();
       }
 
-      const selectedYear = yearPicker.property('value');
-      const countryId = d.id;
-      const country = jsonData.find(c => c.Country === countryName[countryId]);
-      const hdiRank = country ? country[selectedYear] || '???' : '???';
+      const activeYear = activeYearPicker.property('value');
+      const Id = d.id;
+      const country = jsonData.find(file => file.Country === countryName[Id]);
+      const hdiRank = country ? country[activeYear] || 'unknown' : 'not registered';
 
-      hdiLabel = svg.append('text')
+      hdiDisplayText = svg.append('text')
         .attr('class', 'hdi-label')
-        .attr('x', 10)
-        .attr('y', 20)
-        .text(`HDI in ${selectedYear} for ${countryName[countryId]}: ${hdiRank}`);
+        .attr('x', 300)
+        .attr('y', 550)
+        .text(`HDI in ${activeYear} for ${countryName[Id]}: ${hdiRank}`);
     });
 
-    yearPicker.on('change', () => {
+    activeYearPicker.on('change', () => {
       countryPaths.attr('fill', d => {
-        const countryId = d.id;
-        const country = jsonData.find(c => c.Country === countryName[countryId]);
+        const Id = d.id;
+        const country = jsonData.find(data => data.Country === countryName[Id]);
         if (country) {
-          const selectedYear = yearPicker.property('value');
-          const hdiRank = country[selectedYear] || '???';
+          const activeYear = activeYearPicker.property('value');
+          const hdiRank = country[activeYear] || 'unknown';
 
-          const colorScale = d3.scaleLinear()
+          const colorRange = d3.scaleLinear()
             .domain([0, 1])
             .range(['red', 'green']);
 
-          return colorScale(hdiRank);
+          return colorRange(hdiRank);
         } else {
           return 'white';
         }
       });
-
-      countryPaths.select('title')
-        .text(d => {
-          const countryId = d.id;
-          const country = jsonData.find(c => c.Country === countryName[countryId]);
-          if (country) {
-            const selectedYear = yearPicker.property('value');
-            const hdiRank = country[selectedYear] || '???';
-            return `${country.Country} (HDI Rank: ${hdiRank})`;
-          } else {
-            return 'unknown';
-          }
-        });
     });
   });
 

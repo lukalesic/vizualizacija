@@ -95,6 +95,7 @@
         .attr('x', 300)
         .attr('y', 550)
         .text(`HDI in ${activeYear} for ${countryName[Id]}: ${hdiRank}`);
+        
     });
 
   });

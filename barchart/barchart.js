@@ -25,7 +25,9 @@ d3.json("jsondata.json").then(function(data) {
 
   yearPicker.on("change", function() {
     currentYear = yearPicker.property("value");
-    updateChart(currentYear);
+    var sortOrder = sortOrderSelect.value;
+
+    updateChart(currentYear, sortOrder);
   });
   
   var sortOrderSelect = document.getElementById("sort-order");

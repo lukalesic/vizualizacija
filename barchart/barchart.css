@@ -8,7 +8,7 @@
     padding: 20px;
   }
 
-  #chart-container {
+  #chartarea {
     overflow-x: scroll;
       width: 99%;
     }

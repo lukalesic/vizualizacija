@@ -1,44 +1,31 @@
-.header {
-    background-color: lightgreen;
-    padding: 10px;
-    color: white;
-    display: flex;
-    align-items: center;
-  }
-  
+
   .header h2 {
-    margin: 0;
     flex: 1;
   }
-  
+
   .header a {
     color: white;
     text-decoration: none;
     padding: 8px 16px;
-    background-color: transparent;
-    border: 2px solid lightgreen;
-    border-radius: 4px;
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    background-color: lightsteelblue;
   }
-  
-  .header a:hover {
-    background-color: lightgreen;
+
+  #chartarea {
+    overflow-x: scroll;
+     width: 99%;
+    }
+
+  .header {
+    background-color: lightblue;
+    display: flex;
+    align-items: center;
+    padding: 10px;
     color: white;
   }
-  
-  .header .dropdown {
-    margin-left: 10px;
-    background-color: lightgreen;
-  }
-  
-  .button {
-    margin: 10px;
+
+  .linkbutton {
+    margin: 11px;
     padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
+    background-color: lightsteelblue;
   }
   

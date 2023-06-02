@@ -79,7 +79,7 @@
        .duration(500)
        .attr("d", line)
        .style("fill", "none")
-       .style("stroke", "lightblue");
+       .style("stroke", "black");
 
      linePath.exit()
        .remove();

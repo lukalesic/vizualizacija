@@ -2,6 +2,7 @@ var margin = { top: 20, right: 20, bottom: 30, left: 10 };
 var height = 400 - margin.top - margin.bottom;
 var width = 20000 - margin.left - margin.right;
 
+//postavljanje SVG elementa - izvor: https://www.tutorialsteacher.com/d3js/create-bar-chart-using-d3js?utm_content=cmp-true
 var svgElement = d3.select("#chart")
   .attr("height", height)
   .attr("width", width)
@@ -13,6 +14,7 @@ d3.json("jsondata.json").then(function(data) {
     return !isNaN(key);
   });
 
+  //postavljanje pickera za godinu na isti nacin kao i u worldmap.js:
   var yearPicker = d3.select("#currentyearpicker");
   yearPicker.selectAll("option")
     .data(years)
@@ -23,6 +25,7 @@ d3.json("jsondata.json").then(function(data) {
   var currentYear = yearPicker.property("value");
   updateChart(currentYear);
 
+  //svaki put kad  se promjeni godina azurira se graf:
   yearPicker.on("change", function() {
     currentYear = yearPicker.property("value");
     var sortOrder = sortOrderSelect.value;
@@ -52,10 +55,12 @@ d3.json("jsondata.json").then(function(data) {
       return false;
     });
 
+    //uklanjanje nedefiniranih ili krivih vrijednosti iz JSON-a:
     jsonDataByYear = jsonDataByYear.filter(function(yearValue) {
       return yearValue.Value !== ".." && yearValue.Value !== undefined && yearValue.Value !== "";
     });
 
+    //funkcija za ascend ili descend sort:
     jsonDataByYear.sort(function(min, max) {
       if (sortOrder === "ascending") {
         return min.Value - max.Value;
@@ -95,6 +100,7 @@ d3.json("jsondata.json").then(function(data) {
     var bars = svgElement.selectAll(".chartbars")
       .data(jsonDataByYear);
 
+      //postavljanje tranzicije:
     bars.enter()
       .append("rect")
       .attr("class", "chartbars")

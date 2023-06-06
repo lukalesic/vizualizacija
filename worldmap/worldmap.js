@@ -1,6 +1,8 @@
 (function (d3, topojson) {
   'use strict';
 
+  //postavljanje projekta - izvor: https://www.youtube.com/watch?v=9ZB1EgaJnBU&t=668s
+
   const svg = d3.select('svg');
   const projection = d3.geoNaturalEarth1();
   const pathGen = d3.geoPath().projection(projection);
@@ -14,6 +16,8 @@
   svg.call(d3.zoom().on('zoom', () => {
     g.attr('transform', d3.event.transform);
   }));
+
+  //povezivanje podataka iz .tsv, json filea i topojson-a - izvor: https://www.toptal.com/javascript/a-map-to-perfection-using-d3-js-to-make-beautiful-web-maps
 
   Promise.all([
     d3.tsv('https://unpkg.com/world-atlas@1.1.4/world/50m.tsv'),
@@ -35,7 +39,7 @@
       .text(year => year);
 
     const countries = topojson.feature(topoJSONdata, topoJSONdata.objects.countries);
-
+//povezivanje podataka iz dva json filea:
     const allcountries = g
     .selectAll('path')
     .data(countries.features)
@@ -58,7 +62,7 @@
         return 'white'; 
       }
     });
-
+//postavljanje pickera za godinu:
     activeYearPicker.on('change', () => {
       allcountries.attr('fill', d => {
         const Id = d.id;
@@ -79,6 +83,7 @@
     });
 
     let hdiDisplayText = null;
+    //postavljanje teksta za prikaz informacija o HDI:
 
     allcountries.on('click', clicked => {
       if (hdiDisplayText) {

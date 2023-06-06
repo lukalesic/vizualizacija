@@ -2,6 +2,8 @@
  var width = 20000 - margin.left - margin.right;
  var height = 500 - margin.top;
 
+ // postavljanje svg elementa (isto kao u barchart.js):
+
  var svg = d3.select("#chart")
  .attr("height", height)
    .attr("width", width)
@@ -23,6 +25,7 @@
    var currentActiveYear = yearsArray.property("value");
    updateLineGraph(currentActiveYear);
 
+   //azuriranje grafa svaki put kad se promijeni godina:
    yearsArray.on("change", function() {
      currentActiveYear = yearsArray.property("value");
      updateLineGraph(currentActiveYear);
@@ -34,6 +37,8 @@
      var yearData = data.map(function(d) {
        return { "Country": d.Country, "Value": d[year], "HDI": d.HDI };
      });
+
+     //izbacivanje nedefiniranih i krivih vrijednosti:
 
      yearData = yearData.filter(function(d) {
        return d.Value !== "??"  && d.Value !== undefined && d.Value !== "..";
@@ -55,6 +60,8 @@
        var labels = svg.selectAll(".label")
        .data(yearData);
 
+
+       //postavljanje teksta s informacijama:
      labels.enter()
        .append("text")
        .attr("class", "label")
@@ -71,6 +78,7 @@
      var linePath = svg.selectAll(".path")
        .data([yearData]);
 
+       //koristenje tranzicije:
      linePath.enter()
        .append("path")
        .attr("class", "path")
